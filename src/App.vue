@@ -1,47 +1,71 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive } from 'vue';
+import Cabecalho from './components/Cabecalho.vue';
+import Formulario from './components/Formulario.vue';
+import Resultado from './components/Resultado.vue';
 
-
-const estado = reactive({
-  sel: 'adicao',
+const state = reactive({
+  filtro: 'soma',
   num1: '',
   num2: '',
   resultado: '',
 })
 
+const soma = () => {
+  const resultadoSoma = state.num1 + state.num2
+  state.resultado = resultadoSoma;
+  return state.resultado
+}
+
+const subtracao = () => {
+  const resultadoSubtracao = state.num1 - state.num2
+  state.resultado = resultadoSubtracao;
+  return state.resultado
+}
+
+const multiplicacao = () => {
+  const resultadoMultiplicacao = state.num1 * state.num2
+  state.resultado = resultadoMultiplicacao;
+  return state.resultado
+}
+
+const divisao = () => {
+  const resultadoDivisao = state.num1 / state.num2
+  state.resultado = resultadoDivisao
+  return state.resultado
+}
 </script>
 
 <template>
-  <div class="container mt-5 text-center">
-    <h1 class="h3 mb-3">Selecione a operação que deseja fazer:</h1>
-    <div class="row text-center justify-content-center">
-      <select v-model="estado.sel" class="form-select">
-        <option value="adicao" selected>Adição</option>
-        <option value="subtracao">Subtração</option>
-        <option value="multiplicacao">Multiplicação</option>
-        <option value="divisao">Divisão</option>
-      </select>
-    </div>
-    <div class="row text-center justify-content-center mt-4">
-      <input class="col-md-4 form-control" type="number" name="num1" id="" placeholder="1° número">
-    </div>
-    <p class="h3" v-if="estado.sel === 'adicao'">+</p>
-    <p class="h3" v-if="estado.sel === 'subtracao'">-</p>
-    <p class="h3" v-if="estado.sel === 'multiplicacao'">x</p>
-    <p class="h3" v-if="estado.sel === 'divisao'">/</p>
-    <div class="row text-center justify-content-center mt-1">
-      <input class="col-md-4 form-control" type="number" name="num2" id="" placeholder="2° número">
-    </div>
-    <p class="h3">=</p>
-    <div class="row text-center justify-content-center mt-1">
-      <input readonly v-model="resultado" class="col-md-4 form-control" type="number" name="resultado" placeholder="Resultado">
+  <div class="container">
+    <div>
+      <Cabecalho />
+      <Formulario :valorPrimeiroInput="event => state.num1 = Number(event.target.value)"
+        :valorSegundoInput="event => state.num2 = Number(event.target.value)" :filtro="state.filtro"
+        :selecionaFiltro="event => state.filtro = event.target.value" />
+      <Resultado :filtro="state.filtro" :funcaoSoma="soma()" :funcaoSub="subtracao()" :funcaoMult="multiplicacao()"
+        :funcaoDivisao="divisao()" />
     </div>
   </div>
 </template>
 
 <style scoped>
-.form-select,
-.form-control {
-  max-width: 200px;
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  width: 100vw;
+  height: 100vh;
+
+  padding: 0;
+  padding-bottom: 196px;
 }
+@media screen and (min-width: 360px) {
+  .container {
+    width: 80%;
+  }
+}
+
 </style>
